@@ -1,0 +1,30 @@
+{
+  "groups": [
+    {
+      "name": "auth",
+      "type": "com.opensef.auth.spring.boot.autoconfigure.AuthProperties",
+      "sourceType": "com.opensef.auth.spring.boot.autoconfigure.AuthProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "auth.timeout",
+      "type": "java.lang.Long",
+      "description": "过期时间（秒），-1为用不过期",
+      "sourceType": "com.opensef.auth.spring.boot.autoconfigure.AuthProperties"
+    },
+    {
+      "name": "auth.token-name",
+      "type": "java.lang.String",
+      "description": "token名称",
+      "sourceType": "com.opensef.auth.spring.boot.autoconfigure.AuthProperties"
+    },
+    {
+      "name": "auth.token-style",
+      "type": "com.opensef.auth.config.TokenStyle",
+      "description": "token风格，UUID、random32,random64、random128，默认为uuid 当实现TokenHandler接口自定义实现时，此配置不生效",
+      "sourceType": "com.opensef.auth.spring.boot.autoconfigure.AuthProperties"
+    }
+  ],
+  "hints": []
+}
