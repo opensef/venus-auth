@@ -45,7 +45,7 @@ public class AuthManager {
      * @return token信息
      */
     public AuthToken login(String loginId) {
-        return login(loginId, null);
+        return login(loginId, null, null);
     }
 
     /**
@@ -55,9 +55,11 @@ public class AuthManager {
      * @param addInfo 附加信息，可将此信息存储到token缓存中
      * @return token信息
      */
-    public AuthToken login(String loginId, Map<String, Object> addInfo) {
+    public AuthToken login(String loginId, Map<String, Object> addInfo, Long expireTime) {
         long createdTime = System.currentTimeMillis();
-        long expireTime = expireTime(authConfig.getTimeout());
+        if (null == expireTime) {
+            expireTime = expireTime(authConfig.getTimeout());
+        }
 
         // 创建token
         String token = tokenHandler.createToken();

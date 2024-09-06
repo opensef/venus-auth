@@ -34,7 +34,19 @@ public class AuthUtil {
      * @return token信息
      */
     public static AuthToken login(String loginId, Map<String, Object> addInfo) {
-        return authManager.login(loginId, addInfo);
+        return authManager.login(loginId, addInfo, null);
+    }
+
+    /**
+     * 登录
+     *
+     * @param loginId    登录唯一标识
+     * @param addInfo    附加信息，附加信息，可将此信息存储到token缓存中
+     * @param expireTime 过期时间（秒）
+     * @return token信息
+     */
+    public static AuthToken login(String loginId, Map<String, Object> addInfo, long expireTime) {
+        return authManager.login(loginId, addInfo, expireTime);
     }
 
     /**
