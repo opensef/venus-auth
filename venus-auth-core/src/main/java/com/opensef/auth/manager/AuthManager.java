@@ -59,6 +59,8 @@ public class AuthManager {
         long createdTime = System.currentTimeMillis();
         if (null == expireTime) {
             expireTime = expireTime(authConfig.getTimeout());
+        } else {
+            expireTime = expireTime(expireTime);
         }
 
         // 创建token
@@ -122,10 +124,16 @@ public class AuthManager {
      * @param token token
      */
     public void logoutByToken(String token) {
+        AuthTokenValue tokenValue = getTokenValue(token);
+        if (null == tokenValue) {
+            return;
+        }
+
         // 删除token
         cache.remove(genTokenKey(token));
+
         // 获取session
-        AuthSession authSession = getSessionByToken(token);
+        AuthSession authSession = getSession(tokenValue.getLoginId());
         if (authSession == null || authSession.getTokenList() == null || authSession.getTokenList().isEmpty()) {
             return;
         }
@@ -582,7 +590,7 @@ public class AuthManager {
      * @return token的key
      */
     public String genTokenKey(String token) {
-        return "auth:token:" + token;
+        return authConfig.getTokenKey() + ":" + token;
     }
 
     /**
@@ -592,7 +600,7 @@ public class AuthManager {
      * @return session的key
      */
     public String genSessionKey(String loginId) {
-        return "auth:session:" + loginId;
+        return authConfig.getSessionKey() + ":" + loginId;
     }
 
     /**

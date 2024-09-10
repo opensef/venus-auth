@@ -13,6 +13,16 @@ public class AuthConfig {
      */
     private TokenStyle tokenStyle;
 
+    /**
+     * tokenKey，默认为 auth:token
+     */
+    private String tokenKey;
+
+    /**
+     * sessionKey，默认为 auth:session
+     */
+    private String sessionKey;
+
     public Long getTimeout() {
         return timeout;
     }
@@ -27,6 +37,22 @@ public class AuthConfig {
 
     public void setTokenStyle(TokenStyle tokenStyle) {
         this.tokenStyle = tokenStyle;
+    }
+
+    public String getTokenKey() {
+        return tokenKey;
+    }
+
+    public void setTokenKey(String tokenKey) {
+        this.tokenKey = tokenKey;
+    }
+
+    public String getSessionKey() {
+        return sessionKey;
+    }
+
+    public void setSessionKey(String sessionKey) {
+        this.sessionKey = sessionKey;
     }
 
 }

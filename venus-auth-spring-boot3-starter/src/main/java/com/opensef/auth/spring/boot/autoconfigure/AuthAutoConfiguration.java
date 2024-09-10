@@ -70,6 +70,8 @@ public class AuthAutoConfiguration {
         AuthConfig authConfig = new AuthConfig();
         authConfig.setTimeout(authProperties.getTimeout());
         authConfig.setTokenStyle(authProperties.getTokenStyle());
+        authConfig.setTokenKey(authProperties.getTokenKey());
+        authConfig.setSessionKey(authProperties.getSessionKey());
 
         AuthManager authManager = new AuthManager();
         authManager.init(tokenHandler, tokenAnalysisHandler, permissionHandler, (Cache<Object, Object>) cache, authConfig);
