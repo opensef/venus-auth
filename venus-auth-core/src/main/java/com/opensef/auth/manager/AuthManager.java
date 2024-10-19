@@ -223,6 +223,9 @@ public class AuthManager {
      */
     public void setSessionData(String loginId, Object data) {
         AuthSession authSession = getSession(loginId);
+        if (null == authSession) {
+            return;
+        }
         authSession.setData(data);
 
         Long expire = cache.getExpire(authSession.getSessionId());
