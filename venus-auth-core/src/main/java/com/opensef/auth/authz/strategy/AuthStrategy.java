@@ -2,6 +2,7 @@ package com.opensef.auth.authz.strategy;
 
 import com.opensef.auth.manager.AuthManager;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 /**
@@ -13,8 +14,8 @@ public interface AuthStrategy {
     /**
      * AOP鉴权
      *
-     * @param method 注解
+     * @param annotation 注解
      */
-    void checkAuth(Method method, AuthManager authManager);
+    void checkAuth(Annotation annotation, AuthManager authManager);
 
 }

@@ -19,24 +19,24 @@ public class AuthStrategyFactory {
         return STRATEGY_MAP.get(annotation.annotationType());
     }
 
-    private static final AuthStrategy checkLogin = (method, authManager) -> {
+    private static final AuthStrategy checkLogin = (annotation, authManager) -> {
         authManager.checkLogin();
     };
-    private static final AuthStrategy checkRole = (method, authManager) -> {
-        CheckRole annotation = method.getAnnotation(CheckRole.class);
-        if (Logical.AND.equals(annotation.logical())) {
-            authManager.checkRoleAnd(Arrays.asList(annotation.value()));
+    private static final AuthStrategy checkRole = (annotation, authManager) -> {
+        CheckRole checkRoleAnnotation = (CheckRole) annotation;
+        if (Logical.AND.equals(checkRoleAnnotation.logical())) {
+            authManager.checkRoleAnd(Arrays.asList(checkRoleAnnotation.value()));
         } else {
-            authManager.checkRoleOr(Arrays.asList(annotation.value()));
+            authManager.checkRoleOr(Arrays.asList(checkRoleAnnotation.value()));
         }
     };
 
-    private static final AuthStrategy checkPermission = (method, authManager) -> {
-        CheckPermission annotation = method.getAnnotation(CheckPermission.class);
-        if (Logical.AND.equals(annotation.logical())) {
-            authManager.checkPermissionAnd(Arrays.asList(annotation.value()));
+    private static final AuthStrategy checkPermission = (annotation, authManager) -> {
+        CheckPermission checkPermissionAnnotation = (CheckPermission) annotation;
+        if (Logical.AND.equals(checkPermissionAnnotation.logical())) {
+            authManager.checkPermissionAnd(Arrays.asList(checkPermissionAnnotation.value()));
         } else {
-            authManager.checkPermissionOr(Arrays.asList(annotation.value()));
+            authManager.checkPermissionOr(Arrays.asList(checkPermissionAnnotation.value()));
         }
     };
 

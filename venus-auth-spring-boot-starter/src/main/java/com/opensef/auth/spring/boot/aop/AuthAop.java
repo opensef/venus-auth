@@ -32,10 +32,17 @@ public class AuthAop {
     )
     public Object auth(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         Method method = ((MethodSignature) proceedingJoinPoint.getSignature()).getMethod();
+        // 先扫描类上的注解
+        for (Annotation annotation : method.getDeclaringClass().getAnnotations()) {
+            AuthStrategy authStrategy = authStrategyFactory.get(annotation);
+            if (null != authStrategy) {
+                authStrategy.checkAuth(annotation, authManager);
+            }
+        }
         for (Annotation annotation : method.getAnnotations()) {
             AuthStrategy authStrategy = authStrategyFactory.get(annotation);
             if (null != authStrategy) {
-                authStrategy.checkAuth(method, authManager);
+                authStrategy.checkAuth(annotation, authManager);
             }
         }
         return proceedingJoinPoint.proceed();
