@@ -13,9 +13,19 @@ public class AuthTokenValue {
     private String loginId;
 
     /**
+     * Token有效期（秒）
+     */
+    private Long timeout;
+
+    /**
      * 创建时间
      */
     private Long createdTime;
+
+    /**
+     * Token过期时间（毫秒）
+     */
+    private Long expireTime;
 
     /**
      * 附加信息
@@ -25,9 +35,11 @@ public class AuthTokenValue {
     public AuthTokenValue() {
     }
 
-    public AuthTokenValue(String loginId, Long createdTime, Map<String, Object> addInfo) {
+    public AuthTokenValue(String loginId, Long timeout, Long createdTime, Long expireTime, Map<String, Object> addInfo) {
         this.loginId = loginId;
+        this.timeout = timeout;
         this.createdTime = createdTime;
+        this.expireTime = expireTime;
         this.addInfo = addInfo;
     }
 
@@ -39,12 +51,28 @@ public class AuthTokenValue {
         this.loginId = loginId;
     }
 
+    public Long getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(Long timeout) {
+        this.timeout = timeout;
+    }
+
     public Long getCreatedTime() {
         return createdTime;
     }
 
     public void setCreatedTime(Long createdTime) {
         this.createdTime = createdTime;
+    }
+
+    public Long getExpireTime() {
+        return expireTime;
+    }
+
+    public void setExpireTime(Long expireTime) {
+        this.expireTime = expireTime;
     }
 
     public Map<String, Object> getAddInfo() {
@@ -58,8 +86,10 @@ public class AuthTokenValue {
     @Override
     public String toString() {
         return "AuthTokenValue{" +
-                "loginId=" + loginId +
+                "loginId='" + loginId + '\'' +
+                ", timeout=" + timeout +
                 ", createdTime=" + createdTime +
+                ", expireTime=" + expireTime +
                 ", addInfo=" + addInfo +
                 '}';
     }

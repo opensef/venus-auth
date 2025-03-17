@@ -53,21 +53,24 @@ public class AuthManager {
      *
      * @param loginId 登录唯一标识
      * @param addInfo 附加信息，可将此信息存储到token缓存中
+     * @param timeout token有效期（秒）
      * @return token信息
      */
-    public AuthToken login(String loginId, Map<String, Object> addInfo, Long expireTime) {
+    public AuthToken login(String loginId, Map<String, Object> addInfo, Long timeout) {
         long createdTime = System.currentTimeMillis();
-        if (null == expireTime) {
-            expireTime = expireTime(authConfig.getTimeout());
+        // 过期时间（毫秒）
+        long timeoutMillis;
+        if (null == timeout) {
+            timeoutMillis = expireTime(authConfig.getTimeout());
         } else {
-            expireTime = expireTime(expireTime);
+            timeoutMillis = expireTime(timeout);
         }
 
         // 创建token
         String token = tokenHandler.createToken();
 
         // 保存token
-        cache.put(genTokenKey(token), new AuthTokenValue(loginId, createdTime, addInfo), expireTime);
+        cache.put(genTokenKey(token), new AuthTokenValue(loginId, timeout, createdTime, createdTime + timeoutMillis, addInfo), timeoutMillis);
 
         AuthToken authToken = new AuthToken(token, createdTime, addInfo);
 
@@ -85,7 +88,7 @@ public class AuthManager {
             authSession.getTokenList().add(token);
         }
 
-        cache.put(authSession.getSessionId(), authSession, expireTime);
+        cache.put(authSession.getSessionId(), authSession, timeoutMillis);
 
         return authToken;
     }
@@ -286,7 +289,12 @@ public class AuthManager {
         }
         String token = tokenAnalysisHandler.getToken();
         AuthTokenValue tokenValue = getTokenValue(token);
-        updateTokenAndSessionTimeout(token, tokenValue.getLoginId(), expireTime(authConfig.getTimeout()));
+
+        // 如果当前时间距离 Token 过期时间大于5分钟，则不执行更新（减轻缓存压力，提高性能）
+        if (System.currentTimeMillis() - tokenValue.getExpireTime() > 30000) {
+            return;
+        }
+        updateTokenAndSessionTimeout(token, tokenValue.getLoginId(), expireTime(tokenValue.getTimeout()));
     }
 
     /**
