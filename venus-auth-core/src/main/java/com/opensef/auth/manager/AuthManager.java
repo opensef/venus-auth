@@ -72,7 +72,7 @@ public class AuthManager {
         AuthToken authToken = new AuthToken(token, createdTime, addInfo);
 
         // 根据loginId获取session，如果存在则更新，不存在则创建
-        AuthSession authSession = (AuthSession) cache.get(genSessionKey(loginId));
+        AuthSession authSession = getSession(loginId);
         if (null == authSession) {
             authSession = new AuthSession();
             authSession.setSessionId(genSessionKey(loginId));
@@ -85,7 +85,7 @@ public class AuthManager {
             authSession.getTokenList().add(token);
         }
 
-        cache.put(genSessionKey(loginId), authSession, expireTime);
+        cache.put(authSession.getSessionId(), authSession, expireTime);
 
         return authToken;
     }
@@ -105,17 +105,19 @@ public class AuthManager {
      */
     public void logout(String loginId) {
         AuthSession authSession = getSession(loginId);
-        if (authSession == null || authSession.getTokenList() == null || authSession.getTokenList().isEmpty()) {
+        if (authSession == null) {
             return;
-        }
-
-        // 删除token
-        for (String token : authSession.getTokenList()) {
-            cache.remove(genTokenKey(token));
         }
 
         // 删除session
         cache.remove(genSessionKey(authSession.getSessionId()));
+
+        if (authSession.getTokenList() != null && !authSession.getTokenList().isEmpty()) {
+            // 删除token
+            for (String token : authSession.getTokenList()) {
+                cache.remove(genTokenKey(token));
+            }
+        }
     }
 
     /**
@@ -134,19 +136,18 @@ public class AuthManager {
 
         // 获取session
         AuthSession authSession = getSession(tokenValue.getLoginId());
-        if (authSession == null || authSession.getTokenList() == null || authSession.getTokenList().isEmpty()) {
+        if (authSession == null) {
             return;
         }
 
         // 判断session是否存在多个token，如果存在多个，删除token列表中对应的值，更新session；如果只有一个token，则删除session
-        if (authSession.getTokenList().size() == 1) {
+        if ((authSession.getTokenList() == null || authSession.getTokenList().isEmpty()) || authSession.getTokenList().size() == 1) {
             cache.remove(authSession.getSessionId());
         } else {
             authSession.getTokenList().remove(token);
             long expire = cache.getExpire(authSession.getSessionId());
             cache.put(authSession.getSessionId(), authSession, expire);
         }
-
     }
 
     /**
@@ -226,7 +227,6 @@ public class AuthManager {
         if (null == authSession) {
             return;
         }
-        authSession.setData(data);
 
         Long expire = cache.getExpire(authSession.getSessionId());
 
