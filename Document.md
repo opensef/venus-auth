@@ -251,7 +251,7 @@ public class ProjectConfiguration {
         // 拦截的路径
         registration.addUrlPatterns("/*");
         registration.setName("authFilter");
-        // 值越小，Filter越靠前
+        // 值越小，Filter越靠前，注意：如果其他过滤器中需要获取用户信息，那必须保证当前权限过滤器的排序值小于其他过滤器，否则在其他过滤器中无法获取用户信息
         registration.setOrder(-999999999);
         return registration;
     }
