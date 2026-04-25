@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>venus-auth-core</artifactId>
+    <name>venus-auth-core</name>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>

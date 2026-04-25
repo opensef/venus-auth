@@ -6,10 +6,11 @@
     <parent>
         <groupId>com.opensef</groupId>
         <artifactId>venus-auth</artifactId>
-        <version>1.0.4</version>
+        <version>1.0.5</version>
     </parent>
 
     <artifactId>venus-auth-spring-boot-starter</artifactId>
+    <name>venus-auth-spring-boot-starter</name>
 
     <properties>
         <spring-boot.version>2.7.3</spring-boot.version>

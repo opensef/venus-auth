@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>venus-auth-spring-boot3-starter</artifactId>
+    <name>venus-auth-spring-boot3-starter</name>
 
     <properties>
         <spring-boot.version>3.2.1</spring-boot.version>
