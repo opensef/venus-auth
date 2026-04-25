@@ -61,6 +61,7 @@ public class AuthManager {
         // 过期时间（毫秒）
         long timeoutMillis;
         if (null == timeout) {
+            timeout = authConfig.getTimeout();
             timeoutMillis = expireTime(authConfig.getTimeout());
         } else {
             timeoutMillis = expireTime(timeout);
@@ -113,8 +114,10 @@ public class AuthManager {
         }
 
         // 删除session
-        cache.remove(genSessionKey(authSession.getSessionId()));
+        cache.remove(genSessionKey(loginId));
+        // cache.remove(authSession.getSessionId());
 
+        // 根据 loginId 退出，删除全部 Token
         if (authSession.getTokenList() != null && !authSession.getTokenList().isEmpty()) {
             // 删除token
             for (String token : authSession.getTokenList()) {
@@ -291,7 +294,7 @@ public class AuthManager {
         AuthTokenValue tokenValue = getTokenValue(token);
 
         // 如果当前时间距离 Token 过期时间大于5分钟，则不执行更新（减轻缓存压力，提高性能）
-        if (System.currentTimeMillis() - tokenValue.getExpireTime() > 30000) {
+        if (System.currentTimeMillis() - tokenValue.getExpireTime() > 300000) {
             return;
         }
         updateTokenAndSessionTimeout(token, tokenValue.getLoginId(), expireTime(tokenValue.getTimeout()));
