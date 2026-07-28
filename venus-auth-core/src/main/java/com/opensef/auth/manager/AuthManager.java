@@ -19,23 +19,23 @@ import java.util.Map;
 
 public class AuthManager {
 
-    private static TokenHandler tokenHandler;
+    private TokenHandler tokenHandler;
 
-    private static TokenAnalysisHandler tokenAnalysisHandler;
+    private TokenAnalysisHandler tokenAnalysisHandler;
 
-    private static PermissionHandler permissionHandler;
+    private PermissionHandler permissionHandler;
 
-    private static Cache<Object, Object> cache;
+    private Cache<Object, Object> cache;
 
-    private static AuthConfig authConfig;
+    private AuthConfig authConfig;
 
     public void init(TokenHandler tokenHandler, TokenAnalysisHandler tokenAnalysisHandler, PermissionHandler permissionHandler,
                      Cache<Object, Object> cache, AuthConfig authConfig) {
-        AuthManager.tokenHandler = tokenHandler;
-        AuthManager.tokenAnalysisHandler = tokenAnalysisHandler;
-        AuthManager.permissionHandler = permissionHandler;
-        AuthManager.cache = cache;
-        AuthManager.authConfig = authConfig;
+        this.tokenHandler = tokenHandler;
+        this.tokenAnalysisHandler = tokenAnalysisHandler;
+        this.permissionHandler = permissionHandler;
+        this.cache = cache;
+        this.authConfig = authConfig;
     }
 
     /**
